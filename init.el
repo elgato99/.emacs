@@ -150,3 +150,58 @@
 
 
 (delete-selection-mode 1)
+
+ (use-package expand-region
+     :straight t)
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+
+
+(use-package multiple-cursors
+  :straight t
+  :hook (fundamental-mode)
+  :bind
+  (("C-S-c C-S-c" . mc/edit-lines)
+   ("C->" . mc/mark-next-like-this)
+   ("C-<" . mc/mark-previous-like-this)
+   ("C-c C-<" . mc/mark-all-like-this)))
+
+
+(use-package org-bullets
+  :straight t
+  :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(setq org-edit-src-content-indentation 0
+      org-src-tab-acts-natively t
+      org-src-fontify-natively t
+      org-confirm-babel-evaluate nil
+      org-support-shift-select 'always)
+
+
+(use-package org-mind-map
+  :straight t
+  :init
+  (require 'ox-org)
+  :ensure t
+  ;; Uncomment the below if 'ensure-system-packages` is installed
+  ;;:ensure-system-package (gvgen . graphviz)
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  )
+
+
+(define-transient-command >d ()
+  "tangrammer dispatcher"
+  [["mind-map"
+    ("m" "mind-map" org-mind-map-write)
+    ("n" "mind-map" org-mind-map-write)]
+     ])
+(global-set-key (kbd "<f1>") '>d)
+
